@@ -1,0 +1,18 @@
+Test ID,Folder,Request Name,Endpoint,Method,Input Summary,Expected Status,Test Type,Pass/Fail
+TC-01,01_Functional,GET /health — Service còn sống,/health,GET,No body,200,Functional,PASS
+TC-02,01_Functional,POST /policy/access-check — ALLOW,/policy/access-check,POST,"cardId=RFID-2026-001, gateId=GATE-01, direction=ENTER",200,Functional,PASS
+TC-03,01_Functional,GET /policy/rules — Danh sách rules,/policy/rules,GET,No body,200,Functional,PASS
+TC-04,01_Functional,GET /policy/rules/{policyId} — Chi tiết rule,/policy/rules/POL-2026-001,GET,policyId=POL-2026-001,200,Functional,PASS
+TC-05,01_Functional,POST /access-log — Gửi log ALLOW,/access-log,POST,"cardId=RFID-2026-001, decision=ALLOW",201,Functional,PASS
+TC-06,02_Auth,GET /policy/rules — Có token hợp lệ,/policy/rules,GET,Bearer lab-token,200,Auth,PASS
+TC-07,02_Auth,GET /policy/rules — Không có token,/policy/rules,GET,No Authorization header,401/403,Auth,PASS
+TC-08,03_Negative,POST /policy/access-check — cardId sai định dạng,/policy/access-check,POST,cardId=INVALID-CARD,400/422,Negative,PASS
+TC-09,03_Negative,POST /policy/access-check — Thiếu field bắt buộc,/policy/access-check,POST,Only cardId provided,400/422,Negative,PASS
+TC-10,03_Negative,GET /policy/rules/{policyId} — policyId không tồn tại,/policy/rules/POL-9999-999,GET,policyId=POL-9999-999,200/404,Negative,PASS
+TC-11,04_Boundary_Reliability,GET /policy/rules — limit=1,/policy/rules?limit=1,GET,limit=1 (min boundary),200,Boundary,PASS
+TC-12,04_Boundary_Reliability,GET /policy/rules — limit=100,/policy/rules?limit=100,GET,limit=100 (max boundary),200,Boundary,PASS
+TC-13,04_Boundary_Reliability,POST /access-log — Gửi log DENY với reason,/access-log,POST,"cardId=RFID-2026-002, decision=DENY, reason=text",201,Reliability,PASS
+TC-14,05_Consumer_side_Smoke,GET /health — Access Gate kiểm tra Core Business,/health,GET,No auth (smoke),200,Consumer Smoke,PASS
+TC-15,05_Consumer_side_Smoke,POST /policy/access-check — Consumer smoke test EXIT,/policy/access-check,POST,"cardId=RFID-2026-001, direction=EXIT",200,Consumer Smoke,PASS
+TC-16,06_Local_only_NonFunctional,GET /health — Response time SLA,/health,GET,No body,200,Non-Functional,PASS
+TC-17,06_Local_only_NonFunctional,POST /policy/access-check — Latency SLA,/policy/access-check,POST,"cardId=RFID-2026-001, direction=ENTER",200,Non-Functional,PASS
